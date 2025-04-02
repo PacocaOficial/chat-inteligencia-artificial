@@ -1,6 +1,10 @@
+import os
 from fastapi import FastAPI, HTTPException
 import ollama
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -34,13 +38,16 @@ async def analyze_post(request: PostRequest):
                 {
                     "role": "system",
                     "content": (
-                        "Analise se esse post é ofensivo, falso ou inadequado. "
-                        "Se for permitido, retorne exatamente a frase 'Post Permitido'. "
-                        "Se não for permitido, retorne apenas o motivo."
-                    ),
+                        "Você é um sistema de moderação de conteúdo para a plataforma/rede social Paçoca. "
+                        f"Analise o seguinte post com base em nossas diretrizes de uso e moderação. Diretrizes em: {os.getenv('GUIDELINES_URL')}. Termos de uso em: {os.getenv('TERMS_USE_URL')}"
+                        "Se o post for permitido, responda apenas com: 'Post Permitido'. "
+                        "Se não for permitido, responda apenas com o motivo da remoção, de forma objetiva e breve."
+                    )
                 },
                 {"role": "user", "content": request.content},
-            ],
+            ]
+
+
         )
 
         ai_message = response["message"]["content"].strip().lower()
