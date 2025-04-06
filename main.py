@@ -4,12 +4,18 @@ import ollama
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
-
 from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
-
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # ou só o IP do front
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class PostRequest(BaseModel):
     content: str
