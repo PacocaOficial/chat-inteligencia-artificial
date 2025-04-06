@@ -4,7 +4,6 @@ from read_file import read_file
 
 REDE_SOCIAL = "Paçoca"
 LINK = os.getenv('LINK')
-LINK = "https://react.pacoca.net"
 ABOUT = f"{LINK}/sobre"
 USE_OF_TERMS = f"{LINK}/termos-uso"
 GUIDELINES = f"{LINK}/diretrizes"

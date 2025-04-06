@@ -24,6 +24,14 @@ class PostRequest(BaseModel):
 async def home():
     return {"message": "Olá Mundo"}
 
+@app.get("/hello-world")
+async def home():
+    return {"message": "Olá Mundo"}
+
+@app.get("/ola-mundo")
+async def home():
+    return {"message": "Olá Mundo"}
+
 @app.post("/analyze")
 async def analyze_post(request: PostRequest):
     try:
