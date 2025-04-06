@@ -5,46 +5,9 @@ from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 
+from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
+
 load_dotenv()
-
-REDE_SOCIAL = "Paçoca"
-LINK = os.getenv('LINK')
-ABOUT = f"{LINK}/sobre"
-USE_OF_TERMS = f"{LINK}/termos-uso"
-GUIDELINES = f"{LINK}/diretrizes"
-READ_BOOKS = os.getenv('READ_BOOKS')
-DISCORD = os.getenv('DISCORD')
-
-LINKS = {
-    "link oficial": LINK,
-    "termos de uso": f"{LINK}/termos-uso",
-    "diretrizes": f"{LINK}/termos-uso",
-    "login": f"{LINK}/login",
-    "criar conta": f"{LINK}/cadastro",
-    "doação": f"{LINK}/doacao",
-    "Paçoca games - jogos online do paçoca": f"{LINK}/jogos",
-    "readbooks - read books": READ_BOOKS,
-    "configurações": f"{LINK}/configuracoes",
-    "configurar privacidade": f"{LINK}/privacidade",
-    "visualizar sessões ativas": f"{LINK}/sessoes-ativas",
-    "configurar notificações": f"{LINK}/configuracoes/notificacoes",
-    "premium - pagar verificado": f"{LINK}/verificado",
-    "minhas comunidades": f"{LINK}/comunidades",
-    "discord oficial": DISCORD,
-    "baixar paçoca": f"{LINK}/download",
-    "significado dos selos": f"{LINK}/significado-selos",
-    "dashboard com dados atualizados do Paçoca": f"{LINK}/dashboard",
-}
-
-defaultText = (
-    f"Você é uma IA para a plataforma/rede social {REDE_SOCIAL} ela é real e possui usuários ativos."
-    f"Tudo que você precisa saber sobre a rede social e sobre sua criação está em: {ABOUT}."
-    f"Diretrizes da rede social e da comunidade disponível em: {GUIDELINES}."
-    f"Termos de uso da rede social e da comunidade disponível em: {USE_OF_TERMS}."
-    f"Números reais da pladaforma, como quantidade de usuárois em: {LINK}/dashboard."
-   "Todos os links úteis e oficiais:\n" +
-    "\n".join([f"{k}: {v}" for k, v in LINKS.items()])
-)
 
 app = FastAPI()
 
@@ -64,7 +27,7 @@ async def analyze_post(request: PostRequest):
                 {
                     "role": "system",
                     "content": (
-                        defaultText,
+                        DEFAULT_TEXT,
                         f"Analise o seguinte post com base em nossas diretrizes de uso e moderação. Diretrizes em: {GUIDELINES}. Termos de uso em: {USE_OF_TERMS}"
                         "Se não for tiver informações suficience, responda apenas com: 'Post Permitido''. "
                         "Se o post for permitido, responda apenas com: 'Post Permitido'. "
@@ -97,7 +60,7 @@ async def chat_stream(request: PostRequest):
     messages = [
         {
             "role": "system",
-            "content": defaultText + f"\nA mensagem do usuário é: {request.content}"
+            "content": DEFAULT_TEXT + f"\nA mensagem do usuário é: {request.content}"
 
         },
         {"role": "user", "content": request.content},
