@@ -3,14 +3,17 @@ from fastapi import FastAPI, HTTPException
 import ollama
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
+from dotenv import load_dotenv
+
+load_dotenv()
 
 REDE_SOCIAL = "Paçoca"
-LINK = "http://127.0.0.1:3000"
+LINK = os.getenv('LINK')
 ABOUT = f"{LINK}/sobre"
 USE_OF_TERMS = f"{LINK}/termos-uso"
 GUIDELINES = f"{LINK}/diretrizes"
-READ_BOOKS = "https://readbooks.site"
-DISCORD = "https://discord.com/invite/vJjGNcjKpj"
+READ_BOOKS = os.getenv('READ_BOOKS')
+DISCORD = os.getenv('DISCORD')
 
 LINKS = {
     "link oficial": LINK,
