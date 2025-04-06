@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI, HTTPException
 import ollama
 from pydantic import BaseModel
-from fastapi.responses import StreamingResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
 from dotenv import load_dotenv
 from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,7 +22,10 @@ class PostRequest(BaseModel):
 
 @app.get("/")
 async def home():
-    return {"message": "Olá Mundo"}
+    link = os.getenv("LINK")
+    if not link:
+        return {"error": "LINK não configurado no .env"}
+    return RedirectResponse(url=link)
 
 @app.get("/hello-world")
 async def home():
