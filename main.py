@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import Body, Depends, FastAPI, HTTPException, Request
 import ollama
 from pydantic import BaseModel
 from fastapi.responses import RedirectResponse, StreamingResponse
@@ -12,15 +12,33 @@ from fastapi import status
 load_dotenv()
 app = FastAPI()
 
+ALLOWED_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ou só o IP do front
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+async def verify_origin(request: Request):
+    try:
+        origin = request.headers.get("origin") or request.headers.get("referer")
+        if origin:
+            if not any(origin.startswith(o) for o in ALLOWED_ORIGINS):
+                return False
+            return True
+        else:
+            return False
+    except HTTPException as e:
+        return False
+
 class PostRequest(BaseModel):
     content: str
+
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import HTTPException
+
 
 @app.get("/")
 async def home():
@@ -39,6 +57,9 @@ async def home():
 
 @app.post("/analyze")
 async def analyze_post(request: PostRequest):
+    if await verify_origin(request=request) == False:
+       return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
+   
     try:
         response = ollama.chat(
             model="mistral",
@@ -75,14 +96,17 @@ async def analyze_post(request: PostRequest):
 
 
 @app.post("/chat")
-async def chat_stream(request: PostRequest):
+async def chat_stream(request: Request, body: PostRequest = Body(...)):
+    if await verify_origin(request=request) == False:
+       return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
+    
     messages = [
         {
             "role": "system",
-            "content": DEFAULT_TEXT + f"\nA mensagem do usuário é: {request.content}"
+            "content": DEFAULT_TEXT + f"\nA mensagem do usuário é: {body.content}"
 
         },
-        {"role": "user", "content": request.content},
+        {"role": "user", "content": body.content},
     ]
 
     def stream_response():
@@ -95,6 +119,8 @@ async def chat_stream(request: PostRequest):
 
     return StreamingResponse(stream_response(), media_type="text/plain")
 
+
+# rotas 404 retorna link do site
 @app.exception_handler(StarletteHTTPException)
 async def redirect_404(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 404:

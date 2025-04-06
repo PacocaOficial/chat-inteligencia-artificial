@@ -6,6 +6,7 @@
       escolares. Inspirado pela ideia de criar uma plataforma de
       interação social, ele decidiu iniciar o desenvolvimento de uma
       rede social, programando sozinho desde o início até hoje.
+      Atualmente, João tem 19 anos e estuda na Fatec da Zona Leste Analise e Desenvolvimento de Sistemas
     História
       O projeto foi desenvolvido de forma independente, idealizado e
       programado apenas pelo João, ao longo do tempo, aprimorado
