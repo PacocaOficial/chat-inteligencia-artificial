@@ -68,7 +68,7 @@ async def chat_stream(request: PostRequest):
 
     def stream_response():
         try:
-            for chunk in ollama.chat(model="mistral", messages=messages, stream=True):
+            for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
                 content = chunk["message"]["content"]
                 yield content
         except Exception as e:
