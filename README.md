@@ -1,10 +1,11 @@
 # Validador de Conteúdo com IA
 
-Este projeto utiliza Inteligência Artificial para validar automaticamente posts recém-publicados. Caso um post seja considerado inadequado, o sistema realiza a remoção de forma automática.
+Chat de IA utilizando Ollama localmente com Python para responder perguntas de uma rede social, além de moderar conteúdo
 
 ## Tecnologias Utilizadas
 - **FastAPI**: Framework para a criação da API de validação
 - **Ollama**: IA utilizada para analisar o conteúdo dos posts
+- **gemma**: Modelo de IA performatico
 - **Python**: Linguagem de programação principal do projeto
 
 ## Como Funciona
