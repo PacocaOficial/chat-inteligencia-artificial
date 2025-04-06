@@ -73,4 +73,8 @@
       aplicação. Com React, o Paçoca poderá oferecer uma experiência de
       usuário ainda mais fluida e responsiva
       Em 2024 foi lançado a versão oficial do Paçoca em React Native
-      para Android, e Windows, em breve disponível para iOS.  
+      para Android, e Windows, em breve disponível para iOS.
+
+    Contato do criador
+      Aqui está o linkedin do Criador do paçoca: https://www.linkedin.com/in/joãoenrique
+      Aqui está o GitHub do criador do Paçoca: https://github.com/JoaoEnrique

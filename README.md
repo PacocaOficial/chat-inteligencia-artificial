@@ -35,7 +35,7 @@ Este projeto utiliza Inteligência Artificial para validar automaticamente posts
    ```
 5. Execute a API:
    ```sh
-   uvicorn main:app --reload
+   uvicorn main:app --reload --port 8082
    ```
 
 ## Uso da API
