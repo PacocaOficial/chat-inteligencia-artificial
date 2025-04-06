@@ -1,0 +1,81 @@
+    Sobre
+      Paçoca é uma rede social 100% brasileira criada por João Enrique
+      Barbosa Santos Alves em 2020. Aos 16 anos, João estudava
+      Desenvolvimento de Sistemas na ETEC da Zona Leste e buscava
+      desenvolver um projeto útil que fosse além das atividades
+      escolares. Inspirado pela ideia de criar uma plataforma de
+      interação social, ele decidiu iniciar o desenvolvimento de uma
+      rede social, programando sozinho desde o início até hoje.
+      Atualmente, João tem 19 anos e estuda na Fatec da Zona Leste Analise e Desenvolvimento de Sistemas
+    História
+      O projeto foi desenvolvido de forma independente, idealizado e
+      programado apenas pelo João, ao longo do tempo, aprimorado
+      sempre que João tinha disponibilidade. A primeira versão do
+      Paçoca foi lançada em um servidor gratuito. O crescimento
+      inesperado da rede social aconteceu quando o Twitter/X sofreu uma
+      instabilidade, levando João a divulgar o Paçoca no Facebook.
+      Isso gerou um aumento expressivo no número de usuários,
+      ocasionando a queda dos servidores devido ao alto tráfego.
+      Desde então, a equipe tem trabalhado na melhoria dos servidores e
+      na otimização do código para suportar a crescente demanda de
+      usuários. Em 2024, dois grandes colaboradores, Zack e Bochecha,
+      juntaram-se ao projeto, trazendo novas ideias e contribuindo para
+      o avanço da plataforma. Em 2025, Pixel tornou-se um membro
+      fundamental, auxiliando significativamente na segurança do sistema
+      e na migração para um servidor mais robusto.
+
+    Expansão e desenvolvimento
+      Atualmente, o Paçoca continua evoluindo, com constantes melhorias
+      e ajustes técnicos para oferecer uma experiência mais estável e
+      eficiente para seus usuários. O projeto segue ganhando
+      notoriedade, e diferentes versões sobre sua origem têm sido
+      divulgadas, contribuindo para a crescente repercussão da
+      plataforma.
+      Em 2024 foi lançado a versão oficial do Paçoca em React Native
+      para Android, e Windows, em breve disponível para iOS.
+
+    Tecnologias Iniciais
+      <b>Laravel e PHP:</b> O backend do Paçoca é desenvolvido em
+      Laravel, um framework PHP que facilita a construção de aplicações
+      web modernas e escaláveis. Laravel oferece uma sintaxe elegante e
+      uma estrutura MVC (Model-View-Controller) que organiza o código de
+      maneira eficiente, promovendo a separação de responsabilidades.
+      <b>MySQL:</b> Para o gerenciamento de dados, o Paçoca utiliza o
+      MySQL, um sistema de gerenciamento de banco de dados relacional
+      amplamente utilizado. MySQL permite o armazenamento eficiente de
+      dados, bem como a realização de consultas complexas, garantindo a
+      integridade e a segurança das informações.
+      <b>HTML/CSS:</b> O frontend da aplicação é desenvolvido em HTML e
+      CSS, que são as tecnologias fundamentais para a construção de
+      páginas web. HTML fornece a estrutura básica do conteúdo, enquanto
+      o CSS é responsável pelo design e pela apresentação visual,
+      permitindo que a aplicação tenha uma interface atraente e
+      responsiva.
+      <b>JavaScript:</b> O JavaScript é utilizado para adicionar
+      interatividade e dinamismo à aplicação. Com ele, é possível
+      manipular o DOM, realizar validações de formulários e criar
+      experiências de usuário mais envolventes.
+      <b>React Native:</b> O aplicativo do Paçoca para dispositivos
+      Android e iOS é desenvolvido em React Native. Essa tecnologia
+      permite criar aplicações nativas utilizando JavaScript e React,
+      proporcionando um desempenho otimizado e uma experiência de
+      usuário fluida em ambas as plataformas móveis.
+      <b>Electron:</b> Para as versões de desktop do Paçoca, que são
+      compatíveis com Windows, Linux e macOS, a aplicação é desenvolvida
+      em Electron. Essa plataforma permite a construção de aplicações
+      desktop utilizando tecnologias web, como HTML, CSS e JavaScript,
+      oferecendo uma interface consistente e funcionalidades nativas em
+      múltiplos sistemas operacionais.
+      <b>Migração para React Em 01 de abril de 2025</b>, o frontend do
+      Paçoca será migrado para o React, uma biblioteca JavaScript
+      desenvolvida pelo Facebook. A migração para React visa melhorar a
+      eficiência do desenvolvimento do frontend, permitindo a criação de
+      componentes reutilizáveis e facilitando a gestão do estado da
+      aplicação. Com React, o Paçoca poderá oferecer uma experiência de
+      usuário ainda mais fluida e responsiva
+      Em 2024 foi lançado a versão oficial do Paçoca em React Native
+      para Android, e Windows, em breve disponível para iOS.
+
+    Contato do criador
+      Aqui está o linkedin do Criador do paçoca: https://www.linkedin.com/in/joãoenrique
+      Aqui está o GitHub do criador do Paçoca: https://github.com/JoaoEnrique

@@ -1,0 +1,29 @@
+Os selos não podem ser dados de um usuário para outro
+O selo de verificado deve ser comprado
+O de criador de conteúdo é forncedido de forma automática.
+E os selos de equipe do paçoca é dado a todos os usuários que estão dentro da equipe
+
+Significado dos Selos - Rede Social Paçoca
+
+🟦 Verificado
+Conta verificada. Custo de R$ 5,00 por mês.
+
+🟨 Criador de Conteúdo
+Concedido a perfis engajados. Basta postar com frequência para receber.
+
+Equipe do Paçoca:
+
+🔵 Coordenador Geral
+Responsável por supervisionar toda a equipe e tomar decisões estratégicas.
+
+🟣 Supervisor
+Ajuda na moderação e organização das atividades da equipe.
+
+🟢 Staff
+Membro da equipe com diversas funções operacionais.
+
+🟪 Ajudante
+Auxilia os outros membros da equipe e usuários da rede.
+
+🔴 Moderador
+Responsável por manter a ordem e aplicar as regras da comunidade.
