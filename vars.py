@@ -1,5 +1,7 @@
 import os
 
+from read_file import read_file
+
 REDE_SOCIAL = "Paçoca"
 LINK = os.getenv('LINK')
 LINK = "https://react.pacoca.net"
@@ -32,10 +34,12 @@ LINKS = {
 
 DEFAULT_TEXT = (
     f"Você é uma IA para a plataforma/rede social {REDE_SOCIAL} ela é real e possui usuários ativos."
-    f"Tudo que você precisa saber sobre a rede social e sobre sua criação está em: {ABOUT}."
+    f"Tudo que você precisa saber sobre a rede social e sobre sua criação está em: {read_file("sobre.txt")}."
     f"Diretrizes da rede social e da comunidade disponível em: {GUIDELINES}."
     f"Termos de uso da rede social e da comunidade disponível em: {USE_OF_TERMS}."
     f"Números reais da pladaforma, como quantidade de usuárois em: {LINK}/dashboard."
    "Todos os links úteis e oficiais:\n" +
     "\n".join([f"{k}: {v}" for k, v in LINKS.items()])
 )
+
+print(f"Tudo que você precisa saber sobre a rede social e sobre sua criação está em: {read_file("sobre.txt")}.")
