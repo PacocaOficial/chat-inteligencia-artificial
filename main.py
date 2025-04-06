@@ -1,11 +1,13 @@
 import os
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 import ollama
 from pydantic import BaseModel
 from fastapi.responses import RedirectResponse, StreamingResponse
 from dotenv import load_dotenv
 from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi import status
 
 load_dotenv()
 app = FastAPI()
@@ -92,3 +94,9 @@ async def chat_stream(request: PostRequest):
             yield f"[ERRO]: {str(e)}"
 
     return StreamingResponse(stream_response(), media_type="text/plain")
+
+@app.exception_handler(StarletteHTTPException)
+async def redirect_404(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        return RedirectResponse(url=os.getenv("LINK"), status_code=status.HTTP_302_FOUND)
+    raise exc
