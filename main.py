@@ -1,7 +1,7 @@
 import os
 from fastapi import Body, Depends, FastAPI, HTTPException, Request
 import ollama
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from fastapi.responses import RedirectResponse, StreamingResponse
 from dotenv import load_dotenv
 from type_datas import ChatRequest, PostRequest
@@ -23,6 +23,7 @@ app.add_middleware(
 )
 
 async def verify_origin(request: Request):
+    return True
     try:
         origin = request.headers.get("origin") or request.headers.get("referer")
         if origin:
@@ -33,7 +34,6 @@ async def verify_origin(request: Request):
             return False
     except HTTPException as e:
         return False
-
 
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
@@ -73,7 +73,6 @@ async def analyze_post(request: PostRequest):
                         "Posts contendo opiniões, linguagem informal ou gírias comuns **não devem ser removidos**. "
                         "Se não for permitido, responda com: 'Post Não Permitido' no inicio da frase e o motivo da remoção, de forma objetiva e breve."
                         f"O conteúdo do post é: {request.content}"
-                        
                     )
                 },
                 {"role": "user", "content": request.content},
@@ -97,39 +96,36 @@ async def analyze_post(request: PostRequest):
 
 @app.post("/chat")
 async def chat_stream(request: Request, body: ChatRequest = Body(...)):
-    if await verify_origin(request=request) == False:
-       return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
+    try:
+        if await verify_origin(request=request) == False:
+            return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
     
-    messages = [
-        {
-            "role": "system",
-            "content": (
-                DEFAULT_TEXT + f"\nA mensagem do usuário é: {body.content}"
-                        "Se o usuário perguntar 'qual é meu nome?', 'qual minha bio?', ou coisas parecidas, responda com os dados abaixo. Sempre responda diretamente ao usuário utilizando 'você', nunca 'o usuário'."
-                        "Se os dados estiverem ausentes, diga isso de forma simpática."
-                        "\n\n--- INFORMAÇÕES DO USUÁRIO ---"
-                        f"\n• Nome: {body.user.name if body.user.name else 'não informado'}"
-                        f"\n• Perfil verificado: {'sim' if body.user.verified_profile else 'não'}"
-                        f"\n• Biografia: {body.user.biography if body.user.biography else 'não informada'}"
-                        f"\n• Data de nascimento: {body.user.birth_date if body.user.birth_date else 'não informada'}"
-                        f"\n• Total de posts: {body.user.total_posts if body.user.total_posts else '0'}"
-                        f"\n• Total de seguidores: {body.user.total_followers if body.user.total_followers else '0'}"
-                        f"\n• Total seguindo: {body.user.total_following if body.user.total_following else '0'}"
-                        )
+        print(body.user.user_name)
+        
+        messages = [
+            {
+                "role": "system",
+                "content": DEFAULT_TEXT + f"\n A mensagem do usuário é: {body.content}"
+            },
+            {"role": "user", "content": body.content},
+        ]
+        
+        print(f"\nNasci dia {body.user.birth_date}" if body.user.birth_date else "Não informei data de nascimento" )
 
-        },
-        {"role": "user", "content": body.content},
-    ]
+        def stream_response():
+            try:
+                for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
+                    content = chunk["message"]["content"]
+                    yield content
+            except Exception as e:
+                yield f"[ERRO]: {str(e)}"
 
-    def stream_response():
-        try:
-            for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
-                content = chunk["message"]["content"]
-                yield content
-        except Exception as e:
-            yield f"[ERRO]: {str(e)}"
+        return StreamingResponse(stream_response(), media_type="text/plain")
 
-    return StreamingResponse(stream_response(), media_type="text/plain")
+    except ValidationError as ve:
+        return JSONResponse(status_code=422, content={"detail": "Erro de validação nos dados enviados.", "errors": ve.errors()})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"detail": "Erro interno no servidor.", "error": str(e)})
 
 
 # rotas 404 retorna link do site
