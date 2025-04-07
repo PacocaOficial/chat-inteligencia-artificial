@@ -4,6 +4,7 @@ import ollama
 from pydantic import BaseModel
 from fastapi.responses import RedirectResponse, StreamingResponse
 from dotenv import load_dotenv
+from type_datas import ChatRequest, PostRequest
 from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -33,8 +34,6 @@ async def verify_origin(request: Request):
     except HTTPException as e:
         return False
 
-class PostRequest(BaseModel):
-    content: str
 
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
@@ -74,6 +73,7 @@ async def analyze_post(request: PostRequest):
                         "Posts contendo opiniões, linguagem informal ou gírias comuns **não devem ser removidos**. "
                         "Se não for permitido, responda com: 'Post Não Permitido' no inicio da frase e o motivo da remoção, de forma objetiva e breve."
                         f"O conteúdo do post é: {request.content}"
+                        
                     )
                 },
                 {"role": "user", "content": request.content},
@@ -96,14 +96,23 @@ async def analyze_post(request: PostRequest):
 
 
 @app.post("/chat")
-async def chat_stream(request: Request, body: PostRequest = Body(...)):
+async def chat_stream(request: Request, body: ChatRequest = Body(...)):
     if await verify_origin(request=request) == False:
        return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
     
     messages = [
         {
             "role": "system",
-            "content": DEFAULT_TEXT + f"\nA mensagem do usuário é: {body.content}"
+            "content": (
+                DEFAULT_TEXT + f"\nA mensagem do usuário é: {body.content}"
+                        "Se o usuário perguntar 'qual é meu nome?', 'qual minha bio?', ou coisas parecidas, responda com os dados abaixo. "
+                        "Se os dados estiverem ausentes, diga isso de forma simpática."
+                        "\n\n--- INFORMAÇÕES DO USUÁRIO ---"
+                        f"\n• Nome: {body.user.name if body.user.name else 'não informado'}"
+                        f"\n• Perfil verificado: {'sim' if body.user.verified_profile else 'não'}"
+                        f"\n• Biografia: {body.user.biography if body.user.biography else 'não informada'}"
+                        f"\n• Data de nascimento: {body.user.birth_date if body.user.birth_date else 'não informada'}"
+                        )
 
         },
         {"role": "user", "content": body.content},
