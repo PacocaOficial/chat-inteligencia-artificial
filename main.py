@@ -100,7 +100,6 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
         if await verify_origin(request=request) == False:
             return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
     
-        print(body.user.user_name)
         
         messages = [
             {
@@ -110,11 +109,9 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
             {"role": "user", "content": body.content},
         ]
         
-        print(f"\nNasci dia {body.user.birth_date}" if body.user.birth_date else "Não informei data de nascimento" )
-
         def stream_response():
             try:
-                for chunk in ollama.chat(model="gemma3", messages=messages, stream=True):
+                for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
                     content = chunk["message"]["content"] 
                     yield content
             except Exception as e:
