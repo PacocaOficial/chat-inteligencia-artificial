@@ -105,7 +105,7 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
         messages = [
             {
                 "role": "system",
-                "content": DEFAULT_TEXT + f"\n A mensagem do usuário é: {body.content}"
+                "content": DEFAULT_TEXT + f"\n Responda com educação e se for o caso com humor. A mensagem do {body.user.name} é: {body.content}"
             },
             {"role": "user", "content": body.content},
         ]
@@ -114,8 +114,8 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
 
         def stream_response():
             try:
-                for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
-                    content = chunk["message"]["content"]
+                for chunk in ollama.chat(model="gemma3", messages=messages, stream=True):
+                    content = chunk["message"]["content"] 
                     yield content
             except Exception as e:
                 yield f"[ERRO]: {str(e)}"
@@ -123,9 +123,9 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
         return StreamingResponse(stream_response(), media_type="text/plain")
 
     except ValidationError as ve:
-        return JSONResponse(status_code=422, content={"detail": "Erro de validação nos dados enviados.", "errors": ve.errors()})
+        return JSONResponse(status_code=200, content={"detail": "Erro de validação nos dados enviados.", "errors": ve.errors()})
     except Exception as e:
-        return JSONResponse(status_code=500, content={"detail": "Erro interno no servidor.", "error": str(e)})
+        return JSONResponse(status_code=200, content={"detail": "Erro interno no servidor.", "error": str(e)})
 
 
 # rotas 404 retorna link do site
