@@ -105,13 +105,16 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
             "role": "system",
             "content": (
                 DEFAULT_TEXT + f"\nA mensagem do usuário é: {body.content}"
-                        "Se o usuário perguntar 'qual é meu nome?', 'qual minha bio?', ou coisas parecidas, responda com os dados abaixo. "
+                        "Se o usuário perguntar 'qual é meu nome?', 'qual minha bio?', ou coisas parecidas, responda com os dados abaixo. Sempre responda diretamente ao usuário utilizando 'você', nunca 'o usuário'."
                         "Se os dados estiverem ausentes, diga isso de forma simpática."
                         "\n\n--- INFORMAÇÕES DO USUÁRIO ---"
                         f"\n• Nome: {body.user.name if body.user.name else 'não informado'}"
                         f"\n• Perfil verificado: {'sim' if body.user.verified_profile else 'não'}"
                         f"\n• Biografia: {body.user.biography if body.user.biography else 'não informada'}"
                         f"\n• Data de nascimento: {body.user.birth_date if body.user.birth_date else 'não informada'}"
+                        f"\n• Total de posts: {body.user.total_posts if body.user.total_posts else '0'}"
+                        f"\n• Total de seguidores: {body.user.total_followers if body.user.total_followers else '0'}"
+                        f"\n• Total seguindo: {body.user.total_following if body.user.total_following else '0'}"
                         )
 
         },
