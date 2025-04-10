@@ -131,13 +131,6 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
             {"role": "user", "content": body.content},
         ]
         
-        # Teste inicial pra ver se o modelo responde, antes de stream
-        try:
-            test_response = ollama.chat(model="gemma", messages=messages, stream=False)
-        except Exception as e:
-            logger.error(f"Erro no Ollama.chat (teste): {str(e)}")
-            return JSONResponse(status_code=500, content={"detail": "Erro ao iniciar conversa com modelo.", "error": str(e)})
-        
         def stream_response():
             try:
                 for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
