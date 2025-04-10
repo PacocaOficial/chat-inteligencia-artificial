@@ -10,6 +10,7 @@ from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi import status
+from fastapi.logger import logger
 
 load_dotenv()
 app = FastAPI()
@@ -49,7 +50,7 @@ async def home():
 
 @app.get("/hello-world")
 async def home():
-    return {"message": "Olá Mundo"}
+    return {"message": "Hello World"}
 
 @app.get("/ola-mundo")
 async def home():
@@ -110,15 +111,22 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
             {"role": "user", "content": body.content},
         ]
         
+        # Teste inicial pra ver se o modelo responde, antes de stream
+        try:
+            test_response = ollama.chat(model="gemma", messages=messages, stream=False)
+        except Exception as e:
+            logger.error(f"Erro no Ollama.chat (teste): {str(e)}")
+            return JSONResponse(status_code=500, content={"detail": "Erro ao iniciar conversa com modelo.", "error": str(e)})
         
         def stream_response():
             try:
                 for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
-                    content = chunk["message"]["content"] 
+                    content = chunk["message"]["content"]
                     yield content
             except Exception as e:
+                logger.error(f"Erro no stream_response: {str(e)}")
                 yield f"[ERRO]: {str(e)}"
-
+                
         return StreamingResponse(stream_response(), media_type="text/event-stream")
 
     except ValidationError as ve:
