@@ -48,12 +48,30 @@ async def home():
         return {"error": "LINK não configurado no .env"}
     return RedirectResponse(url=link)
 
-@app.get("/hello-world")
-async def home():
-    return {"message": "Hello World"}
+@app.post("/hello-world")
+async def hello_world():
+    try:
+        messages=[
+            {"role": "user", "content": "Olá, como vai?"},
+        ]
+    
+        def stream_response():
+            try:
+                for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
+                    content = chunk["message"]["content"]
+                    yield content
+            except Exception as e:
+                logger.error(f"Erro no stream_response: {str(e)}")
+                yield f"[ERRO]: {str(e)}"
+            yield ""  # Forçar fim do stream
+                
+        return StreamingResponse(stream_response(), media_type="text/event-stream")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro na resposta da ia: {str(e)}")
 
 @app.get("/ola-mundo")
-async def home():
+async def ola_mundo():
     return {"message": "Olá Mundo"}
 
 @app.post("/analyze")
@@ -90,6 +108,8 @@ async def analyze_post(request: PostRequest):
         else:
             return {"status": "removido", "analysis": ai_message, "reason": ai_message}
 
+    except ValidationError as ve:
+        return JSONResponse(status_code=200, content={"detail": "Erro de validação nos dados enviados.", "errors": ve.errors()})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro na análise do post: {str(e)}")
     
@@ -111,13 +131,6 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
             {"role": "user", "content": body.content},
         ]
         
-        # Teste inicial pra ver se o modelo responde, antes de stream
-        try:
-            test_response = ollama.chat(model="gemma", messages=messages, stream=False)
-        except Exception as e:
-            logger.error(f"Erro no Ollama.chat (teste): {str(e)}")
-            return JSONResponse(status_code=500, content={"detail": "Erro ao iniciar conversa com modelo.", "error": str(e)})
-        
         def stream_response():
             try:
                 for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
@@ -126,6 +139,7 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
             except Exception as e:
                 logger.error(f"Erro no stream_response: {str(e)}")
                 yield f"[ERRO]: {str(e)}"
+            yield ""  # Forçar fim do stream
                 
         return StreamingResponse(stream_response(), media_type="text/event-stream")
 
@@ -141,3 +155,11 @@ async def redirect_404(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 404:
         return RedirectResponse(url=os.getenv("LINK"), status_code=status.HTTP_302_FOUND)
     raise exc
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Erro inesperado: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Erro interno do servidor: {str(exc)}"},
+    )
