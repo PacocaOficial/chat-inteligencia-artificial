@@ -1,4 +1,4 @@
-# Validador de Conteúdo com IA
+# Chat e moderador de Conteúdo com IA
 
 Chat de IA utilizando Ollama localmente com Python para responder perguntas de uma rede social, além de moderar conteúdo
 
@@ -70,5 +70,5 @@ Chat de IA utilizando Ollama localmente com Python para responder perguntas de u
 - Logs e dashboard para monitoramento das remoções.
 
 ## Licença
-Este projeto está sob a licença MIT. Sinta-se à vontade para contribuir e sugerir melhorias!
-
+Este projeto está licenciado sob a [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt_BR).  
+Você pode copiar, modificar e redistribuir para fins **não comerciais**, desde que atribua os créditos ao autor original.
