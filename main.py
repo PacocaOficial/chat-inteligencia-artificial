@@ -63,6 +63,7 @@ async def hello_world():
             except Exception as e:
                 logger.error(f"Erro no stream_response: {str(e)}")
                 yield f"[ERRO]: {str(e)}"
+            yield ""  # Forçar fim do stream
                 
         return StreamingResponse(stream_response(), media_type="text/event-stream")
 
