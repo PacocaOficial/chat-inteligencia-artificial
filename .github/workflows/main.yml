@@ -23,32 +23,30 @@ jobs:
         SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
         ARGS: "-avz"
         SOURCE: "./"
-        REMOTE_HOST: ${{vars.REMOTE_HOST}}
-        REMOTE_USER: ${{vars.REMOTE_USER}}
-        REMOTE_PORT: ${{vars.REMOTE_PORT}}
-        TARGET: ${{vars.TARGET_DEVELOPMENT}}
+        REMOTE_HOST: ${{secrets.REMOTE_HOST}}
+        REMOTE_USER: ${{secrets.REMOTE_USER}}
+        REMOTE_PORT: ${{secrets.REMOTE_PORT}}
+        TARGET: ${{secrets.TARGET_PRODUCTION}}
 
     - name: Ajustar permissões
       uses: appleboy/ssh-action@v1.2.0
       with:
-        host: ${{ vars.REMOTE_HOST }}
-        username: ${{ vars.REMOTE_USER }}
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ vars.REMOTE_PORT }}
+        port: ${{ secrets.REMOTE_PORT }}
         script: |
-            sudo chown -R www-data:www-data ${{ vars.TARGET_DEVELOPMENT }}
-            sudo chmod -R 775 ${{ vars.TARGET_DEVELOPMENT }}/storage
-            sudo chmod -R 775 ${{ vars.TARGET_DEVELOPMENT }}/bootstrap/cache
+            sudo chown -R www-data:www-data ${{ secrets.TARGET_PRODUCTION }}
 
     - name: Pós-deploy (instalar dependências e restart)
       uses: appleboy/ssh-action@v1.2.0
       with:
-        host: ${{ vars.REMOTE_HOST }}
-        username: ${{ vars.REMOTE_USER }}
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ vars.REMOTE_PORT }}
+        port: ${{ secrets.REMOTE_PORT }}
         script: |
-            cd ${{ vars.TARGET_DEVELOPMENT }}
+            cd ${{ secrets.TARGET_PRODUCTION }}
             # Ative o ambiente virtual e instale dependências, se necessário
             source venv/bin/activate && pip install -r requirements.txt
-            sudo systemctl restart minha-api.service
+            sudo systemctl restart chat-ia.service
