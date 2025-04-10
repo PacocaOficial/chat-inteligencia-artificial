@@ -50,7 +50,7 @@ async def home():
 
 @app.get("/hello-world")
 async def home():
-    return {"message": "Hello World"}
+    return {"message": "Olá Mundo - Teste de atualização do Deploy"}
 
 @app.get("/ola-mundo")
 async def home():
