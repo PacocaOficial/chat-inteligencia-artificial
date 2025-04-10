@@ -49,11 +49,28 @@ async def home():
     return RedirectResponse(url=link)
 
 @app.get("/hello-world")
-async def home():
-    return {"message": "Olá Mundo - Teste de atualização do Deploy"}
+async def hello_world():
+    try:
+        messages=[
+            {"role": "user", "content": "Olá, como vai?"},
+        ]
+    
+        def stream_response():
+            try:
+                for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
+                    content = chunk["message"]["content"]
+                    yield content
+            except Exception as e:
+                logger.error(f"Erro no stream_response: {str(e)}")
+                yield f"[ERRO]: {str(e)}"
+                
+        return StreamingResponse(stream_response(), media_type="text/event-stream")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro na resposta da ia: {str(e)}")
 
 @app.get("/ola-mundo")
-async def home():
+async def ola_mundo():
     return {"message": "Olá Mundo"}
 
 @app.post("/analyze")
