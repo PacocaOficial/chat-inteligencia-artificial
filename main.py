@@ -168,3 +168,11 @@ async def redirect_404(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 404:
         return RedirectResponse(url=os.getenv("LINK"), status_code=status.HTTP_302_FOUND)
     raise exc
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Erro inesperado: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Erro interno do servidor: {str(exc)}"},
+    )
