@@ -75,7 +75,7 @@ async def ola_mundo():
     return {"message": "Olá Mundo"}
 
 @app.post("/teste-post")
-async def ola_mundo():
+async def post_ola_mundo():
     return {"message": "Olá Mundo"}
 
 @app.post("/analyze")
