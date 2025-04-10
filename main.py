@@ -78,6 +78,10 @@ async def ola_mundo():
 async def post_ola_mundo():
     return {"message": "Olá Mundo"}
 
+@app.get("/teste-get")
+async def get_ola_mundo():
+    return {"message": "Olá Mundo"}
+
 @app.post("/analyze")
 async def analyze_post(request: PostRequest):
     if await verify_origin(request=request) == False:
