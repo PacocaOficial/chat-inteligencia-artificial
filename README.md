@@ -17,7 +17,7 @@ Chat de IA utilizando Ollama localmente com Python para responder perguntas de u
 
 1. Clone este repositório:
    ```sh
-   git clone https://github.com/JoaoEnrique/moderacao-com-ia
+   git clone https://github.com/JoaoEnrique/chat-inteligencia-artificial
    cd seu-repositorio
    ```
 2. Crie um ambiente virtual (opcional, mas recomendado):
