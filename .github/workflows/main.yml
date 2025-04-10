@@ -49,4 +49,4 @@ jobs:
             cd ${{ secrets.TARGET_PRODUCTION }}
             # Ative o ambiente virtual e instale dependências, se necessário
             source venv/bin/activate && pip install -r requirements.txt
-            sudo systemctl restart chat-ia.service
+            sudo systemctl restart chat-api.service
