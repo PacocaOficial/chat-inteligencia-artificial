@@ -108,6 +108,8 @@ async def analyze_post(request: PostRequest):
         else:
             return {"status": "removido", "analysis": ai_message, "reason": ai_message}
 
+    except ValidationError as ve:
+        return JSONResponse(status_code=200, content={"detail": "Erro de validação nos dados enviados.", "errors": ve.errors()})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro na análise do post: {str(e)}")
     
