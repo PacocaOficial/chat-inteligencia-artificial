@@ -48,7 +48,7 @@ async def home():
         return {"error": "LINK não configurado no .env"}
     return RedirectResponse(url=link)
 
-@app.get("/hello-world")
+@app.post("/hello-world")
 async def hello_world():
     try:
         messages=[
@@ -72,14 +72,6 @@ async def hello_world():
 
 @app.get("/ola-mundo")
 async def ola_mundo():
-    return {"message": "Olá Mundo"}
-
-@app.post("/teste-post")
-async def post_ola_mundo():
-    return {"message": "Olá Mundo"}
-
-@app.get("/teste-get")
-async def get_ola_mundo():
     return {"message": "Olá Mundo"}
 
 @app.post("/analyze")
