@@ -48,7 +48,7 @@ async def home():
         return {"error": "LINK não configurado no .env"}
     return RedirectResponse(url=link)
 
-@app.post("/hello-world")
+@app.get("/hello-world")
 async def hello_world():
     try:
         messages=[
