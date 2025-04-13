@@ -10,7 +10,10 @@ from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi import status
-from fastapi.logger import logger
+import logging
+logger = logging.getLogger("uvicorn")
+from datetime import datetime, timedelta
+import asyncio
 
 load_dotenv()
 app = FastAPI()
@@ -23,6 +26,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+last_chat_request = datetime.utcnow()
 
 async def verify_origin(request: Request):
     return True
@@ -113,12 +117,13 @@ async def analyze_post(request: PostRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro na análise do post: {str(e)}")
     
-    
-
-
 @app.post("/chat")
 async def chat_stream(request: Request, body: ChatRequest = Body(...)):
+    global last_chat_request
+    
     try:
+        last_chat_request = datetime.utcnow()
+        
         if await verify_origin(request=request) == False:
             return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
     
@@ -148,6 +153,36 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
     except Exception as e:
         return JSONResponse(status_code=200, content={"detail": "Erro interno no servidor.", "error": str(e)})
 
+
+# a IA dorme a cada x tempo, envia uma mensagem a cada x tempo para ela não formir
+@app.on_event("startup")
+async def start_monitoring():
+    async def monitor_inactivity():
+        global last_chat_request
+        while True:
+            now = datetime.utcnow()
+            inactive_by = (now - last_chat_request).total_seconds()
+            # logger.info(f"Inativo por {inactive_by}")
+            
+            # se tiver inativo por x tempo, envia mensagem para acordar
+            if inactive_by > 60:
+                logger.info("Mais de 1 minuto sem requisição. Enviando 'olá' pra IA.")
+                await send_hello_chat()
+                last_chat_request = datetime.utcnow()
+            await asyncio.sleep(1)  # checar a cada 1s
+    asyncio.create_task(monitor_inactivity())
+    
+async def send_hello_chat():
+    # Aqui você evita resposta longa
+    messages = [
+        {"role": "user", "content": "olá"}
+    ]
+    try:
+        for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
+            break  # basta iniciar o stream, já "acorda"
+        logger.info("IA acordada com sucesso.")
+    except Exception as e:
+        logger.error(f"Erro ao acordar IA: {e}")
 
 # rotas 404 retorna link do site
 @app.exception_handler(StarletteHTTPException)
