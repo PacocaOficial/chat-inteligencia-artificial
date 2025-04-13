@@ -52,7 +52,7 @@ DEFAULT_TEXT = (
     "João atualmente estuda Análise e Desenvolvimento de Sistemas na Fatec da Zona Leste.\n"
     "Tecnologias usadas:\n"
     "- Backend: Laravel (PHP) com MySQL\n"
-    "- Web: HTML, CSS e JS (migrando para React)\n"
+    "- Web: HTML, CSS e JS (migrado para para React em 11/04/2025)\n"
     "- App Mobile: React Native (Android e Windows, iOS em desenvolvimento)\n"
     "- App Desktop: Electron (Windows, Linux e macOS)\n"
     f"Diretrizes: {GUIDELINES}\n"
