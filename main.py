@@ -9,12 +9,14 @@ from type_datas import ChatRequest, PostRequest
 from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import HTTPException
 from fastapi import status
 import logging
-logger = logging.getLogger("uvicorn")
 from datetime import datetime, timedelta
 import asyncio
 
+logger = logging.getLogger("uvicorn")
 load_dotenv()
 app = FastAPI()
 
@@ -40,10 +42,6 @@ async def verify_origin(request: Request):
             return False
     except HTTPException as e:
         return False
-
-from fastapi.responses import JSONResponse
-from fastapi.exceptions import HTTPException
-
 
 @app.get("/")
 async def home():
