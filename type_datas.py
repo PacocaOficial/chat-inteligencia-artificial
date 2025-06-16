@@ -22,5 +22,4 @@ class ChatRequest(BaseModel):
     user: User
     
 class ChatRequestImage(BaseModel):
-    user: User # Se "user" for um objeto User com nome
     image_path: str
