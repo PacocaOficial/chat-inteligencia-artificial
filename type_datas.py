@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class PostRequest(BaseModel):
     content: str
@@ -7,7 +7,7 @@ class User(BaseModel):
     name: str = None
     user_name: str = None
     birth_date: str = None
-    verified_profile: bool = None
+    verified_profile: int = None
     site: str = None
     is_banned: bool = None
     biography: str = None
@@ -20,3 +20,7 @@ class User(BaseModel):
 class ChatRequest(BaseModel):
     content: str
     user: User
+    
+class ChatRequestImage(BaseModel):
+    user: User # Se "user" for um objeto User com nome
+    image_path: str
