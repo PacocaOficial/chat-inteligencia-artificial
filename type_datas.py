@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 
 class PostRequest(BaseModel):
     content: str
@@ -22,4 +23,5 @@ class ChatRequest(BaseModel):
     user: User
     
 class ChatRequestImage(BaseModel):
-    image_path: str
+    image_path: Optional[str] = None
+    image_base64: Optional[str] = None

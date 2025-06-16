@@ -95,18 +95,20 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
         "Conteúdos contendo armas, violência explícita, nudez ou qualquer forma de material inapropriado **não são permitidos** e devem ser classificados como inadequados."
     )
 
-    try:
-        # Detecta se é uma URL
-        if body.image_path.startswith("http://") or body.image_path.startswith("https://"):
+    try:        
+        # Primeiro tenta obter a imagem a partir de uma URL
+        if body.image_path and (body.image_path.startswith("http://") or body.image_path.startswith("https://")):
             response = requests.get(body.image_path)
             if response.status_code != 200:
                 return JSONResponse(status_code=404, content={"detail": "Imagem não encontrada na URL fornecida."})
             image_data_base64 = base64.b64encode(response.content).decode("utf-8")
-        elif os.path.exists(body.image_path):
-            with open(body.image_path, "rb") as image_file:
-                image_data_base64 = base64.b64encode(image_file.read()).decode("utf-8")
+
+        # Se não for URL, verifica se já veio como base64
+        elif body.image_base64:
+            image_data_base64 = body.image_base64
+
         else:
-            return JSONResponse(status_code=404, content={"detail": "Caminho da imagem não encontrado."})
+            return JSONResponse(status_code=400, content={"detail": "Nenhuma imagem fornecida. Informe uma URL ou imagem em base64."})
 
         # Prepara as mensagens para o modelo multimodal
         messages = [
