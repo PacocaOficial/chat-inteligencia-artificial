@@ -18,6 +18,7 @@ import logging
 from datetime import datetime, timedelta
 import asyncio
 import requests
+import re
 
 logger = logging.getLogger("uvicorn")
 load_dotenv()
@@ -89,7 +90,10 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
     if await verify_origin(request=request) == False:
         return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
 
-    DEFAULT_TEXT = "Você é um especialista em moderação de imagens."
+    DEFAULT_TEXT = (
+        "Você é um especialista em moderação de imagens. Sua tarefa é identificar e sinalizar imagens que violem as diretrizes de conteúdo. "
+        "Conteúdos contendo armas, violência explícita, nudez ou qualquer forma de material inapropriado **não são permitidos** e devem ser classificados como inadequados."
+    )
 
     try:
         # Detecta se é uma URL
@@ -109,12 +113,17 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
             {
                 "role": "system",
                 "content": (
-                    DEFAULT_TEXT + "\n"
-                    f"Analise a seguinte imagem com base em nossas diretrizes de uso e moderação. Diretrizes em: {GUIDELINES}. Termos de uso em: {USE_OF_TERMS}. "
-                    "Sua resposta DEVE ser um objeto JSON válido com as seguintes chaves: "
-                    "{ \"status\": \"permitido\" | \"removido\", \"reason\": \"<motivo_se_removido_ou_null>\" }. "
-                    "Se a imagem for permitida ou não houver informações suficientes para removê-la, o status deve ser \"permitido\" e o motivo null. "
-                    "Se a imagem não for permitida, o status deve ser \"removido\" e o motivo deve ser uma breve e objetiva descrição da razão da remoção."
+                    "Você é um moderador altamente rigoroso. Sua missão é identificar e sinalizar IMEDIATAMENTE qualquer imagem que viole as regras de conteúdo a seguir. "
+                    "Atenção: mesmo que a imagem não seja sexualizada ou explícita, qualquer nudez total ou parcial — incluindo pessoas com o tórax ou seios visíveis, ainda que parcialmente cobertos ou com iluminação desfocada — deve ser considerada como *removido*. Não interessa a intenção da imagem. Se houver dúvida, classifique como REMOVIDO."
+                    "Conteúdos proibidos incluem:\n"
+                    "- Armas ou violência explícita\n"
+                    "- Nudez (mesmo parcial)\n"
+                    "- Seios visíveis (mesmo parcialmente)\n"
+                    "- Tronco nu em qualquer gênero\n"
+                    "- Posição sugestiva com ausência de roupas\n"
+                    "Formato da resposta: um JSON simples com status e motivo.\n"
+                    "Exemplo:\n"
+                    "{ \"status\": \"removido\", \"reason\": \"A imagem contém nudez parcial com o tronco da mulher exposto.\" }"
                 )
             },
             {
@@ -127,6 +136,8 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
         response = ollama.chat(model="llava", messages=messages)
 
         ai_message_content = response["message"]["content"].strip()
+        ai_message_content = re.sub(r"^```(?:json)?\s*", "", ai_message_content)  # remove início do bloco
+        ai_message_content = re.sub(r"\s*```$", "", ai_message_content)           # remove final do bloco
 
         try:
             parsed_response = json.loads(ai_message_content)
