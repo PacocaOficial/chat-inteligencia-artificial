@@ -139,7 +139,7 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
             },
         ]
 
-        response = await ollama.chat(model="llava", messages=messages, format="json")
+        response = await asyncio.to_thread(ollama.chat, model="llava", messages=messages, format="json")
 
         ai_message_content = response["message"]["content"].strip()
         ai_message_content = re.sub(r"^```(?:json)?\s*", "", ai_message_content)  # remove início do bloco
