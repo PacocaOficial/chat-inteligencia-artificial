@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 import asyncio
 import requests
 import re
+import httpx
 
 logger = logging.getLogger("uvicorn")
 load_dotenv()
@@ -98,9 +99,12 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
     try:        
         # Primeiro tenta obter a imagem a partir de uma URL
         if body.image_path and (body.image_path.startswith("http://") or body.image_path.startswith("https://")):
-            response = requests.get(body.image_path)
+            async with httpx.AsyncClient() as client:
+                response = await client.get(body.image_path)
+
             if response.status_code != 200:
                 return JSONResponse(status_code=404, content={"detail": "Imagem não encontrada na URL fornecida."})
+
             image_data_base64 = base64.b64encode(response.content).decode("utf-8")
 
         # Se não for URL, verifica se já veio como base64
