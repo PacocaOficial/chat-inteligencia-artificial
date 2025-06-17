@@ -116,7 +116,7 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
                 "role": "system",
                 "content": (
                     "Você é um moderador altamente rigoroso. Sua missão é identificar e sinalizar IMEDIATAMENTE qualquer imagem que viole as regras de conteúdo a seguir. "
-                    "Atenção: mesmo que a imagem não seja sexualizada ou explícita, qualquer nudez total ou parcial — incluindo pessoas com o tórax ou seios visíveis, ainda que parcialmente cobertos ou com iluminação desfocada — deve ser considerada como *removido*. Não interessa a intenção da imagem. Se houver dúvida, classifique como REMOVIDO."
+                    "Atenção: mesmo que a imagem não seja sexualizada ou explícita, qualquer pessoa desnuda, nudez total ou parcial — incluindo pessoas com o tórax ou seios visíveis, ainda que parcialmente cobertos ou com iluminação desfocada — deve ser considerada como *removido*. Não interessa a intenção da imagem. Se houver dúvida, classifique como REMOVIDO."
                     "Conteúdos proibidos incluem:\n"
                     "- Armas ou violência explícita\n"
                     "- Nudez (mesmo parcial)\n"
@@ -135,7 +135,7 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
             },
         ]
 
-        response = ollama.chat(model="llava", messages=messages)
+        response = ollama.chat(model="llava", messages=messages, format="json")
 
         ai_message_content = response["message"]["content"].strip()
         ai_message_content = re.sub(r"^```(?:json)?\s*", "", ai_message_content)  # remove início do bloco
