@@ -92,7 +92,6 @@ async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
         if await verify_origin(request=request) == False:
             return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
 
-        return JSONResponse(status_code=200, content={"detail": "Imagem não encontrada na URL fornecida 2"})
         DEFAULT_TEXT = (
             "Você é um especialista em moderação de imagens. Sua tarefa é identificar e sinalizar imagens que violem as diretrizes de conteúdo. "
             "Conteúdos contendo armas, violência explícita, nudez ou qualquer forma de material inapropriado **não são permitidos** e devem ser classificados como inadequados."
