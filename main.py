@@ -264,7 +264,7 @@ async def start_monitoring():
             
             # se tiver inativo por x tempo, envia mensagem para acordar
             if inactive_by > 60:
-                logger.info("Mais de 1 minuto sem requisição. Enviando 'olá' pra IA.")
+                # logger.info("Mais de 1 minuto sem requisição. Enviando 'olá' pra IA.")
                 await send_hello_chat()
                 last_chat_request = datetime.utcnow()
             await asyncio.sleep(1)  # checar a cada 1s
