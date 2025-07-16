@@ -278,7 +278,7 @@ async def send_hello_chat():
     try:
         for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
             break  # basta iniciar o stream, já "acorda"
-        logger.info("IA acordada com sucesso.")
+        # logger.info("IA acordada com sucesso.")
     except Exception as e:
         logger.error(f"Erro ao acordar IA: {e}")
 
