@@ -18,7 +18,7 @@
       ocasionando a queda dos servidores devido ao alto tráfego.
       Desde então, a equipe tem trabalhado na melhoria dos servidores e
       na otimização do código para suportar a crescente demanda de
-      usuários. Em 2024, dois grandes colaboradores, Zack e Bochecha,
+      usuários. Em 2024 os primeiros colaboradores, Zack e Bochecha,
       juntaram-se ao projeto, trazendo novas ideias e contribuindo para
       o avanço da plataforma. Em 2025, Pixel tornou-se um membro
       fundamental, auxiliando significativamente na segurança do sistema

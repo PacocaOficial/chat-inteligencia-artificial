@@ -36,7 +36,6 @@ app.add_middleware(
 last_chat_request = datetime.utcnow()
 
 async def verify_origin(request: Request):
-    return True
     try:
         origin = request.headers.get("origin") or request.headers.get("referer")
         if origin:
@@ -50,10 +49,7 @@ async def verify_origin(request: Request):
 
 @app.get("/")
 async def home():
-    link = os.getenv("LINK")
-    if not link:
-        return {"error": "LINK não configurado no .env"}
-    return RedirectResponse(url=link)
+    return "Ola Mundo"
 
 @app.get("/hello-world")
 async def hello_world():
@@ -77,14 +73,6 @@ async def hello_world():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro na resposta da ia: {str(e)}")
 
-@app.get("/ola-mundo")
-async def ola_mundo():
-    return {"message": "Olá Mundo"}
-
-
-
-import requests
-from urllib.parse import urlparse
 
 @app.post("/analyse/image")
 async def analyse_image(request: Request, body: ChatRequestImage = Body(...)):
