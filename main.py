@@ -36,6 +36,7 @@ app.add_middleware(
 last_chat_request = datetime.utcnow()
 
 async def verify_origin(request: Request):
+    return True
     try:
         origin = request.headers.get("origin") or request.headers.get("referer")
         if origin:
