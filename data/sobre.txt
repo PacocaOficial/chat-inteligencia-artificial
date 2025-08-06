@@ -1,6 +1,6 @@
     Sobre
       Paçoca é uma rede social 100% brasileira criada por João Enrique
-      Barbosa Santos Alves em 2020. Aos 16 anos, João estudava
+      Barbosa Santos Alves em 2023. Aos 17 anos, João estudava
       Desenvolvimento de Sistemas na ETEC da Zona Leste e buscava
       desenvolver um projeto útil que fosse além das atividades
       escolares. Inspirado pela ideia de criar uma plataforma de
@@ -25,7 +25,8 @@
       e na migração para um servidor mais robusto.
 
     Expansão e desenvolvimento
-      Atualmente, o Paçoca continua evoluindo, com constantes melhorias
+      Atualmente, o Bochecha é extremamante importante para o Paçoca e a rede social não seria a mesma sem suas ideias, ajudas, contribuiçõesm
+      moderação e engajamento na rede social. O Paçoca continua evoluindo, com constantes melhorias
       e ajustes técnicos para oferecer uma experiência mais estável e
       eficiente para seus usuários. O projeto segue ganhando
       notoriedade, e diferentes versões sobre sua origem têm sido

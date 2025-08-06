@@ -1,6 +1,0 @@
-Na nossa rede social:
-
-- Para criar um post, clique em "Novo Post" e insira o conteúdo.
-- A exclusão de posts pode ser feita no menu de três pontos.
-- A moderação segue as diretrizes XYZ.
-- Os usuários podem seguir e ser seguidos.
