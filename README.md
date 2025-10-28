@@ -2,6 +2,11 @@
 
 Chat de IA utilizando Ollama localmente com Python para responder perguntas de uma rede social, além de moderar conteúdo
 
+<img width="1919" height="927" alt="image" src="https://github.com/user-attachments/assets/c31ab745-66a2-4b17-a55d-1a7090501e93" />
+
+<img width="1916" height="920" alt="image" src="https://github.com/user-attachments/assets/3e150e0e-95a4-49f0-a3e5-5c1b32417288" />
+
+Design antigo
 <img width="100%" alt="image" src="https://github.com/user-attachments/assets/9911e888-42f2-40ea-9c7e-5408133cf9d3" />
 
 
