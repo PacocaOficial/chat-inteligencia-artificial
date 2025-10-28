@@ -217,7 +217,7 @@ async def analyze_post(request: PostRequest):
         raise HTTPException(status_code=500, detail=f"Erro na análise do post: {str(e)}")
     
 @app.post("/chat")
-async def chat_stream(request: Request, body: ChatRequestV2 = Body(...)):
+async def chat_stream(request: Request, body: ChatRequest = Body(...)):
     global last_chat_request
     
     try:
@@ -253,7 +253,7 @@ async def chat_stream(request: Request, body: ChatRequestV2 = Body(...)):
         return JSONResponse(status_code=200, content={"detail": "Erro interno no servidor.", "error": str(e)})
 
 @app.post("/v2/chat")
-async def chat_stream(request: Request, body: ChatRequest = Body(...)):
+async def chat_stream(request: Request, body: ChatRequestV2 = Body(...)):
     global last_chat_request
     
     try:
