@@ -274,7 +274,7 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
 
         def stream_response():
             try:
-                for chunk in ollama.chat(model="gemma2", messages=messages, stream=True):
+                for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
                     content = chunk["message"]["content"]
                     yield content
             except Exception as e:
