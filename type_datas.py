@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import List, Optional
 
 class PostRequest(BaseModel):
     content: str
@@ -21,6 +21,14 @@ class User(BaseModel):
 class ChatRequest(BaseModel):
     content: str
     user: User
+
+class Message(BaseModel):
+    role: str
+    content: str
+
+class ChatRequestV2(BaseModel):
+    user: User
+    messages: Optional[List[Message]] = []
     
 class ChatRequestImage(BaseModel):
     image_path: Optional[str] = None

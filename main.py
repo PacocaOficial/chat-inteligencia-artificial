@@ -7,7 +7,7 @@ from pydantic import BaseModel, ValidationError
 from fastapi.responses import RedirectResponse, StreamingResponse
 from dotenv import load_dotenv
 from read_file import read_file
-from type_datas import ChatRequest, ChatRequestImage, PostRequest
+from type_datas import ChatRequest, ChatRequestImage, PostRequest, ChatRequestV2
 from vars import DEFAULT_TEXT, GUIDELINES, USE_OF_TERMS
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -217,7 +217,7 @@ async def analyze_post(request: PostRequest):
         raise HTTPException(status_code=500, detail=f"Erro na análise do post: {str(e)}")
     
 @app.post("/chat")
-async def chat_stream(request: Request, body: ChatRequest = Body(...)):
+async def chat_stream(request: Request, body: ChatRequestV2 = Body(...)):
     global last_chat_request
     
     try:
@@ -251,6 +251,49 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
         return JSONResponse(status_code=200, content={"detail": "Erro de validação nos dados enviados.", "errors": ve.errors()})
     except Exception as e:
         return JSONResponse(status_code=200, content={"detail": "Erro interno no servidor.", "error": str(e)})
+
+@app.post("/v2/chat")
+async def chat_stream(request: Request, body: ChatRequest = Body(...)):
+    global last_chat_request
+    
+    try:
+        last_chat_request = datetime.utcnow()
+        
+        if await verify_origin(request=request) == False:
+            return JSONResponse(status_code=403, content={"detail": "Origem desconhecida."})
+
+        # pega histórico completo vindo do frontend
+        messages = [m.dict() if hasattr(m, "dict") else m for m in (body.messages or [])]
+
+        if not messages or messages[0].get("role") != "system":
+            messages.insert(0, {
+                "role": "system",
+                "content": DEFAULT_TEXT + f"usuário: {body.user.name}"
+            })
+
+
+        def stream_response():
+            try:
+                for chunk in ollama.chat(model="gemma2", messages=messages, stream=True):
+                    content = chunk["message"]["content"]
+                    yield content
+            except Exception as e:
+                logger.error(f"Erro no stream_response: {str(e)}")
+                yield f"[ERRO]: {str(e)}"
+            yield ""  # Forçar fim do stream
+                
+        return StreamingResponse(stream_response(), media_type="text/event-stream")
+
+    except ValidationError as ve:
+        return JSONResponse(status_code=200, content={
+            "detail": "Erro de validação nos dados enviados.",
+            "errors": ve.errors()
+        })
+    except Exception as e:
+        return JSONResponse(status_code=200, content={
+            "detail": "Erro interno no servidor.",
+            "error": str(e)
+        })
 
 
 # a IA dorme a cada x tempo, envia uma mensagem a cada x tempo para ela não formir

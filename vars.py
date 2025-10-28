@@ -79,6 +79,7 @@ DEFAULT_TEXT = (
     f"Termos de uso: {USE_OF_TERMS}\n"
     f"Links úteis e oficiais, caso alguém pergunte:\n" + "\n".join([f"- {k}: {v}" for k, v in LINKS.items()]) + "\n"
     f"Perfis oficiais:\n" + "\n".join([f"- {k}: {v}" for k, v in OFFICIAL_PROFILES.items()]) + "\n"
-    "Você deve responder com educação e, quando cabível, com bom humor."
+    "Se o usuário perguntar como fazer algo, procure a resposta em: " + HOW_TO_DO + "\n"
+    "Você deve responder com educação e, quando cabível, com bom humor. \n"
     ""
 )
