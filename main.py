@@ -266,7 +266,7 @@ async def chat_stream(request: Request, body: ChatRequestV2 = Body(...)):
         messages = [m.dict() if hasattr(m, "dict") else m for m in (body.messages or [])]
 
         if not messages or messages[0].get("role") != "system":
-            messages.insert(0, {
+            messages.insert(0, { 
                 "role": "system",
                 "content": DEFAULT_TEXT + f"usuário: {body.user.name}"
             })
@@ -274,7 +274,7 @@ async def chat_stream(request: Request, body: ChatRequestV2 = Body(...)):
 
         def stream_response():
             try:
-                for chunk in ollama.chat(model="gemma", messages=messages, stream=True):
+                for chunk in ollama.chat(model="gemma3", messages=messages, stream=True):
                     content = chunk["message"]["content"]
                     yield content
             except Exception as e:
