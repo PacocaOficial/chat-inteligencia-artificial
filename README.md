@@ -20,6 +20,7 @@ Design antigo
 1. Sempre que um novo post é publicado na sua plataforma, uma requisição é enviada para esta API.
 2. A IA analisa o conteúdo do post e determina se ele é permitido ou deve ser removido.
 3. Caso o post seja inadequado, a API realiza uma requisição ao backend da plataforma para excluí-lo automaticamente.
+4. Ao mandar uma mensagem no chat, a IA responde com base no contexto do Paçoca.
 
 ## Instalação e Execução
 
@@ -72,7 +73,62 @@ Design antigo
   }
   ```
 
-## Rota principal
+### Validação de Imagen
+- **Endpoint:** `POST /analyze/image`
+- **Request: (envia um dos dois formatos)**
+  ```json
+  {
+    "image_path": "path"
+    "image_base64": "path"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "status": "permitido",
+    "reason": "Post Permitido",
+    "analysis": "Resposta completa"
+  }
+  ```
+  ou
+  ```json
+  {
+    "status": "removido",
+    "reason": "Motivo pelo qual o post foi removido",
+    "analysis": "Resposta completa"
+  }
+  ```
+
+### Chat
+- **Endpoint:** `POST /chat`
+- **Request:**
+  ```json
+  {
+    "content": "O que é o Paçoca?",
+    "user": {
+        "name": "Jooao",
+        "user_name": "joao",
+        "birth_date": "13/08/2005",
+        "verified_profile": "11/05/2026",
+        "site": "https://pacoca.net",
+        "is_banned": false,
+        "biography": "Ola Mundo",
+        "email_verified_at": "13/08/2005",
+        "total_posts": 1982,
+        "total_followers": 1711,
+        "total_following": 10,
+        "total_comments": 1907,
+    }
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "context": "Paçoca é uma rede social...",
+  }
+  ```
+
+## Chat
 ```py
 @app.post("/chat")
 async def chat_stream(request: Request, body: ChatRequest = Body(...)):
@@ -115,7 +171,6 @@ async def chat_stream(request: Request, body: ChatRequest = Body(...)):
 
 ## Melhorias Futuras
 - Implementação de um sistema de feedback para aprimorar a precisão da IA.
-- Integração com outras IAs para diferentes tipos de moderação (imagem, áudio, vídeo).
 - Logs e dashboard para monitoramento das remoções.
 
 ## Licença
